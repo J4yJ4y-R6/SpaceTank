@@ -15,6 +15,8 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
   int alienX = 5;
   int alienY = 50;
 
+  boolean lost;
+
   TextObject<I> healthText = new TextObject<>(new Vertex(720,20)
           ,"Health: " + health,"Berlin Sans FB",20);
 
@@ -34,7 +36,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
         alienY += 45;
         alienX = 5;
       }
-      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY)));
+      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY), new Vertex(0.25,0.005)));
       alienX += 45;
     }
 
@@ -49,14 +51,29 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
   @Override
   public void doChecks() {
     if (health<= 0){
-      enemy.add(new TextObject<>(new Vertex(100,300)
-              ,"GAME OVER","Berlin Sans FB",56));
+      loose();
     }
+
+    if (enemy.get(9).getPos().x >= 770 || enemy.get(0).getPos().x <= 0) {
+      for (GameObject<I> en:enemy) {
+        en.setVelocity(new Vertex(-en.getVelocity().x,en.getVelocity().y));
+      }
+    }
+
+    if (enemy.get(20).getPos().y >= 450) {
+      loose();
+    }
+  }
+
+  public void loose() {
+    enemy.add(new TextObject<>(new Vertex(100,300)
+            ,"GAME OVER","Berlin Sans FB",56));
+    lost = true;
   }
 
   @Override
   public boolean isStopped() {
-    return super.isStopped() || health<=0;
+    return super.isStopped() || health<=0 || lost;
   }
 
   @Override
