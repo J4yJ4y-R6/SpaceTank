@@ -22,20 +22,20 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           ,"Highscore: " + highscore,"Berlin Sans FB",20);
 
   public SpaceTank(double widthScreen, double heightScreen) {
-    super(new ImageObject<>("tank.png", new Vertex(widthScreen/2,heightScreen*0.90)),widthScreen,heightScreen);
+    super(new ImageObject<>("tank.png", new Vertex(widthScreen/2,heightScreen*0.85)),widthScreen,heightScreen);
 
-    backgorund.add(new ImageObject<>("space2.gif"));
+    backgorund.add(new ImageObject<>("space.jpg"));
     backgorund.add(healthText);
     backgorund.add(highscoreText);
 
-    for (int aliens = 0; aliens < 20; aliens++) {
+    for (int aliens = 0; aliens < 30; aliens++) {
       String alienType = "alien" + (int) (Math.random() * 3) + ".png";
       if (aliens % 10 == 0) {
-        alienY += 30;
+        alienY += 45;
         alienX = 5;
       }
       enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY)));
-      alienX += 30;
+      alienX += 45;
     }
 
     getGOss().add(backgorund);
