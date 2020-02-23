@@ -1,14 +1,13 @@
 package main;
 
-import javafx.stage.Stage;
 import name.panitz.game.example.simple.SimpleGame;
 import name.panitz.game.framework.fx.GameApplication;
 
-public class FX {
-  public static void main(String[] args) throws Exception {
-    GameApplication Game = new GameApplication(new SimpleGame<>());
-    Stage stage =  new Stage();
-    stage.show();
-    Game.start(stage);
+public class FX extends GameApplication {
+  public FX() {
+    super(new SimpleGame<>());
+  }
+  public static void main(String [] args) {
+    FX.launch();
   }
 }
