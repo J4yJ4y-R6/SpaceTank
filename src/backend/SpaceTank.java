@@ -22,15 +22,15 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           ,"Highscore: " + highscore,"Berlin Sans FB",20);
 
   public SpaceTank(double widthScreen, double heightScreen) {
-    super(new ImageObject<>("hexe.png", new Vertex(widthScreen/2,heightScreen*0.90)),widthScreen,heightScreen);
+    super(new ImageObject<>("tank.png", new Vertex(widthScreen/2,heightScreen*0.90)),widthScreen,heightScreen);
 
-    backgorund.add(new ImageObject<>("space.gif"));
+    backgorund.add(new ImageObject<>("space2.gif"));
     backgorund.add(healthText);
     backgorund.add(highscoreText);
 
-    for (int aliens = 0; aliens <= 10; aliens++) {
+    for (int aliens = 0; aliens < 20; aliens++) {
       String alienType = "alien" + (int) (Math.random() * 3) + ".png";
-      if (aliens % 5 == 0 && aliens != 0) {
+      if (aliens % 10 == 0) {
         alienY += 30;
         alienX = 5;
       }
@@ -39,6 +39,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
     }
 
     getGOss().add(backgorund);
+    goss.add(enemy);
 
     getButtons().add(new Button("Pause", ()-> pause()));
     getButtons().add(new Button("Start", ()-> start()));
@@ -56,5 +57,33 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
   @Override
   public boolean isStopped() {
     return super.isStopped() || health<=0;
+  }
+
+  @Override
+  public void keyPressedReaction(KeyCode keycode) {
+    if (keycode!=null) {
+      switch (keycode){
+        case RIGHT_ARROW:
+          getPlayer().getVelocity().moveTo(new Vertex(2,0));
+          break;
+        case LEFT_ARROW:
+          getPlayer().getVelocity().moveTo(new Vertex(-2,0));
+          break;
+        default: ;
+      }
+    }
+  }
+
+  @Override
+  public void keyReleasedReaction(KeyCode keycode){
+    if (keycode!=null) {
+      switch (keycode){
+        case RIGHT_ARROW:
+        case LEFT_ARROW:
+          getPlayer().getVelocity().moveTo(new Vertex(0,0));
+          break;
+        default: ;
+      }
+    }
   }
 }
