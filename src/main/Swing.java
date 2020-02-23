@@ -1,10 +1,10 @@
 package main;
 
-import name.panitz.game.example.simple.SimpleGame;
+import backend.SpaceTank;
 import name.panitz.game.framework.swing.SwingGame;
 
 public class Swing {
     public static void main(String[] args) {
-        SwingGame.startGame(new SimpleGame<>());
+        SwingGame.startGame(new SpaceTank<>(800,600));
     }
 }
