@@ -8,7 +8,7 @@ import java.util.List;
 public class SpaceTank<I,S> extends AbstractGame<I,S> {
   List<GameObject<I>> backgorund = new ArrayList<>();
   List<GameObject<I>> enemy = new ArrayList<>();
-  List<ImageObject<I>> shield = new ArrayList<>();
+  List<GameObject<I>> missile = new ArrayList<>();
 
   int health = 3;
   int highscore;
@@ -24,7 +24,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           ,"Highscore: " + highscore,"Berlin Sans FB",20);
 
   public SpaceTank(double widthScreen, double heightScreen) {
-    super(new ImageObject<>("tank.png", new Vertex(widthScreen/2,heightScreen*0.85)),widthScreen,heightScreen);
+    super(new ImageObject<>("tank.png", new Vertex(widthScreen/2 - 40,heightScreen*0.85)),widthScreen,heightScreen);
 
     backgorund.add(new ImageObject<>("space.jpg"));
     backgorund.add(healthText);
@@ -42,10 +42,13 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
 
     getGOss().add(backgorund);
     goss.add(enemy);
+    goss.add(missile);
 
     getButtons().add(new Button("Pause", ()-> pause()));
     getButtons().add(new Button("Start", ()-> start()));
     getButtons().add(new Button("Exit", ()-> System.exit(0)));
+
+    pause();
   }
 
   @Override
@@ -63,12 +66,28 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
     if (enemy.get(20).getPos().y >= 450) {
       loose();
     }
+
+    for (GameObject<I> e:enemy) {
+      for (GameObject<I> m:missile) {
+        if (m.touches(e)) {
+          highscore += (int) ((Math.random() * 50) + 100);
+        }
+      }
+    }
+
+    if (enemy.size() == 0) {
+      loose();
+    }
   }
 
   public void loose() {
     enemy.add(new TextObject<>(new Vertex(100,300)
-            ,"GAME OVER","Berlin Sans FB",56));
+            ,"GAME OVER \n HIGHSCORE: " + highscore,"Berlin Sans FB",56));
     lost = true;
+  }
+
+  public void shoot() {
+    missile.add(new ImageObject<>("missile.png",new Vertex(player.getPos().x + 40,510),new Vertex(0,-2)));
   }
 
   @Override
@@ -85,6 +104,9 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           break;
         case LEFT_ARROW:
           getPlayer().getVelocity().moveTo(new Vertex(-2,0));
+          break;
+        case UP_ARROW:
+          shoot();
           break;
         default: ;
       }
