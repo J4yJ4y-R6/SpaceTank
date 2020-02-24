@@ -24,7 +24,8 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           ,"Highscore: " + highscore,"Berlin Sans FB",20);
 
   public SpaceTank(double widthScreen, double heightScreen) {
-    super(new ImageObject<>("tank.png", new Vertex(widthScreen/2 - 40,heightScreen*0.85)),widthScreen,heightScreen);
+    super(new ImageObject<>("tank.png", new Vertex(widthScreen/2 - 40,heightScreen*0.85))
+            ,widthScreen,heightScreen);
 
     backgorund.add(new ImageObject<>("space.jpg"));
     backgorund.add(healthText);
@@ -36,7 +37,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
         alienY += 45;
         alienX = 5;
       }
-      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY), new Vertex(0.25,0.005)));
+      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY), new Vertex(0.25,0.1)));
       alienX += 45;
     }
 
@@ -81,13 +82,16 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
   }
 
   public void loose() {
-    enemy.add(new TextObject<>(new Vertex(100,300)
-            ,"GAME OVER \n HIGHSCORE: " + highscore,"Berlin Sans FB",56));
+    enemy.add(new TextObject<>(new Vertex(100,250)
+            ,"GAME OVER","Berlin Sans FB",50));
+    enemy.add(new TextObject<>(new Vertex(100,310)
+            ,"HIGHSCORE: " + highscore,"Berlin Sans FB",50));
     lost = true;
   }
 
   public void shoot() {
-    missile.add(new ImageObject<>("missile.png",new Vertex(player.getPos().x + 40,510),new Vertex(0,-2)));
+    missile.add(new ImageObject<>("missile.png",new Vertex(player.getPos().x + 40,510)
+            ,new Vertex(0,-2.5)));
   }
 
   @Override
@@ -107,6 +111,12 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           break;
         case UP_ARROW:
           shoot();
+          break;
+        case VK_S:
+          start();
+          break;
+        case VK_P:
+          pause();
           break;
         default: ;
       }
