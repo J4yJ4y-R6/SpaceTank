@@ -63,6 +63,10 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
       loose();
     }
 
+    if (player.getPos().x <= 0 || player.getPos().x >= 700) {
+      player.setVelocity(new Vertex(0,0));
+    }
+
     enemy:
     for (GameObject<I> e:enemy) {
       if (e.getPos().x >= 770 || e.getPos().x <= 0) {
@@ -112,10 +116,16 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
     if (keycode!=null) {
       switch (keycode){
         case RIGHT_ARROW:
-          getPlayer().getVelocity().moveTo(new Vertex(2,0));
+          if (player.getPos().x >= 700) {
+            break;
+          }
+          player.getVelocity().moveTo(new Vertex(2,0));
           break;
         case LEFT_ARROW:
-          getPlayer().getVelocity().moveTo(new Vertex(-2,0));
+          if (player.getPos().x <= 0) {
+            break;
+          }
+          player.getVelocity().moveTo(new Vertex(-2,0));
           break;
         case UP_ARROW:
           shoot();
