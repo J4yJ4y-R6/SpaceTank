@@ -37,7 +37,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
         alienY += 45;
         alienX = 5;
       }
-      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY), new Vertex(0.25,0.1)));
+      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY), new Vertex(0.25,0.1))); //change velocity
       alienX += 45;
     }
 
@@ -58,26 +58,33 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
       loose();
     }
 
-    if (enemy.get(9).getPos().x >= 770 || enemy.get(0).getPos().x <= 0) {
-      for (GameObject<I> en:enemy) {
-        en.setVelocity(new Vertex(-en.getVelocity().x,en.getVelocity().y));
-      }
-    }
-
-    if (enemy.get(20).getPos().y >= 450) {
+    if (enemy.size() == 0) {
       loose();
     }
 
     for (GameObject<I> e:enemy) {
-      for (GameObject<I> m:missile) {
-        if (m.touches(e)) {
-          highscore += (int) ((Math.random() * 50) + 100);
-        }
+      if (e.getPos().y >= 450) {
+        loose();
       }
     }
 
-    if (enemy.size() == 0) {
-      loose();
+    for (GameObject<I> e:enemy) {
+      if (e.getPos().x >= 770 || e.getPos().x <= 0) {
+        e.setVelocity(new Vertex(-e.getVelocity().x,e.getVelocity().y));
+      }
+    }
+
+    enemyHit:
+    for (GameObject<I> e:enemy) {
+      for (GameObject<I> m:missile) {
+        if (m.touches(e)) {
+          highscore += (int) ((Math.random() * 50) + 100);
+          highscoreText.text = "Highscore: " + highscore;
+          enemy.remove(e);
+          missile.remove(m);
+          break enemyHit;
+        }
+      }
     }
   }
 
@@ -96,7 +103,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
 
   @Override
   public boolean isStopped() {
-    return super.isStopped() || health<=0 || lost;
+    return super.isStopped() || lost;
   }
 
   @Override
