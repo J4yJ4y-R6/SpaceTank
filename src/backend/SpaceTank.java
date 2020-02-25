@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpaceTank<I,S> extends AbstractGame<I,S> {
-  List<GameObject<I>> backgorund = new ArrayList<>();
+  List<GameObject<I>> background = new ArrayList<>();
   List<GameObject<I>> enemy = new ArrayList<>();
   List<GameObject<I>> missile = new ArrayList<>();
 
@@ -27,9 +27,9 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
     super(new ImageObject<>("tank.png", new Vertex(widthScreen/2 - 40,heightScreen*0.85))
             ,widthScreen,heightScreen);
 
-    backgorund.add(new ImageObject<>("space.jpg"));
-    backgorund.add(healthText);
-    backgorund.add(highscoreText);
+    background.add(new ImageObject<>("space.jpg"));
+    background.add(healthText);
+    background.add(highscoreText);
 
     for (int aliens = 0; aliens < 30; aliens++) {
       String alienType = "alien" + (int) (Math.random() * 3) + ".png";
@@ -41,7 +41,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
       alienX += 45;
     }
 
-    getGOss().add(backgorund);
+    getGOss().add(background);
     goss.add(enemy);
     goss.add(missile);
 
@@ -51,6 +51,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
 
     pause();
   }
+
 
   @Override
   public void doChecks() {
