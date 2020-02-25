@@ -37,7 +37,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
         alienY += 45;
         alienX = 5;
       }
-      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY), new Vertex(0.25,0.1))); //change velocity
+      enemy.add(new ImageObject<>(alienType,new Vertex(alienX,alienY), new Vertex(0.25,0.05)));
       alienX += 45;
     }
 
@@ -63,27 +63,27 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
       loose();
     }
 
-    for (GameObject<I> e:enemy) {
-      if (e.getPos().y >= 450) {
-        loose();
-      }
-    }
-
+    enemy:
     for (GameObject<I> e:enemy) {
       if (e.getPos().x >= 770 || e.getPos().x <= 0) {
-        e.setVelocity(new Vertex(-e.getVelocity().x,e.getVelocity().y));
+        for (GameObject<I> en: enemy) {
+          en.setVelocity(new Vertex(-en.getVelocity().x, en.getVelocity().y));
+        }
+        break;
       }
-    }
 
-    enemyHit:
-    for (GameObject<I> e:enemy) {
+      if (e.getPos().y >= 450) {
+        loose();
+        break;
+      }
+
       for (GameObject<I> m:missile) {
         if (m.touches(e)) {
           highscore += (int) ((Math.random() * 50) + 100);
           highscoreText.text = "Highscore: " + highscore;
           enemy.remove(e);
           missile.remove(m);
-          break enemyHit;
+          break enemy;
         }
       }
     }
