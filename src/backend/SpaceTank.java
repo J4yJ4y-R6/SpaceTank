@@ -67,6 +67,14 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
       player.setVelocity(new Vertex(0,0));
     }
 
+    missile:
+    for (GameObject<I> m: missile) {
+      if (m.getPos().y <= -20) {
+        missile.remove(m);
+        break;
+      }
+    }
+
     enemy:
     for (GameObject<I> e:enemy) {
       if (e.getPos().x >= 770 || e.getPos().x <= 0) {
