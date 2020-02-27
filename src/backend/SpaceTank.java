@@ -2,8 +2,7 @@ package backend;
 
 import name.panitz.game.framework.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SpaceTank<I,S> extends AbstractGame<I,S> {
   List<GameObject<I>> background = new ArrayList<>();
@@ -45,13 +44,12 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
     goss.add(enemy);
     goss.add(missile);
 
-    getButtons().add(new Button("Pause", ()-> pause()));
-    getButtons().add(new Button("Start", ()-> start()));
+    getButtons().add(new Button("Pause", this::pause));
+    getButtons().add(new Button("Start", this::start));
     getButtons().add(new Button("Exit", ()-> System.exit(0)));
 
     pause();
   }
-
 
   @Override
   public void doChecks() {
@@ -66,8 +64,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
     if (player.getPos().x <= 0 || player.getPos().x >= 700) {
       player.setVelocity(new Vertex(0,0));
     }
-
-    missile:
+    
     for (GameObject<I> m: missile) {
       if (m.getPos().y <= -20) {
         missile.remove(m);
@@ -144,7 +141,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
         case VK_P:
           pause();
           break;
-        default: ;
+        default:
       }
     }
   }
@@ -157,7 +154,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
         case LEFT_ARROW:
           getPlayer().getVelocity().moveTo(new Vertex(0,0));
           break;
-        default: ;
+        default:
       }
     }
   }
