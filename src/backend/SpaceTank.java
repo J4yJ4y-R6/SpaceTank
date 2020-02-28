@@ -8,6 +8,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
   List<GameObject<I>> background = new ArrayList<>();
   List<GameObject<I>> enemy = new ArrayList<>();
   List<GameObject<I>> missile = new ArrayList<>();
+  List<GameObject<I>> enemyShot = new ArrayList<>();
 
   int health = 3;
   int highscore;
@@ -43,6 +44,7 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
     getGOss().add(background);
     goss.add(enemy);
     goss.add(missile);
+    goss.add(enemyShot);
 
     getButtons().add(new Button("Pause", this::pause));
     getButtons().add(new Button("Start", this::start));
@@ -72,6 +74,17 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
       }
     }
 
+    missileAcidHit:
+    for (GameObject<I> m:missile) {
+      for (GameObject<I> es:enemyShot ) {
+        if (m.touches(es)) {
+          enemyShot.remove(es);
+          missile.remove(m);
+          break missileAcidHit;
+        }
+      }
+    }
+
     enemy:
     for (GameObject<I> e:enemy) {
       if (e.getPos().x >= 770 || e.getPos().x <= 0) {
@@ -86,6 +99,14 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
         break;
       }
 
+      if (enemy.indexOf(e) >= enemy.size() - 10 || enemy.size() <= 10) {
+        if (!e.isLeftOf(player) && !e.isRightOf(player)) {
+          if (enemyShot.size() < 1) {
+            enemyShot.add(new ImageObject<>("acid.png", new Vertex(e.getPos().x + 15, e.getPos().y + 30), new Vertex(0, 2)));
+          }
+        }
+      }
+
       for (GameObject<I> m:missile) {
         if (m.touches(e)) {
           highscore += (int) ((Math.random() * 50) + 100);
@@ -93,6 +114,22 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           enemy.remove(e);
           missile.remove(m);
           break enemy;
+        }
+      }
+    }
+
+    if (enemyShot.size() == 1) {
+      for (GameObject<I> es:enemyShot) {
+        if (es.touches(player)) {
+          health--;
+          healthText.text = "Health: " + health;
+          enemyShot.remove(es);
+          break;
+        }
+
+        if (es.getPos().y >= 800) {
+          enemyShot.remove(es);
+          break;
         }
       }
     }
@@ -133,7 +170,9 @@ public class SpaceTank<I,S> extends AbstractGame<I,S> {
           player.getVelocity().moveTo(new Vertex(-2,0));
           break;
         case UP_ARROW:
-          shoot();
+          if (missile.size() < 3) {
+            shoot();
+          }
           break;
         case VK_S:
           start();
